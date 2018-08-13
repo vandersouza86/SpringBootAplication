@@ -1,0 +1,93 @@
+CREATE TABLE CATEGORIA (
+                COD_CATEGORIA BIGINT NOT NULL,
+                DESCRICAO VARCHAR NOT NULL,
+                CONSTRAINT cod_categoria PRIMARY KEY (COD_CATEGORIA)
+);
+
+
+CREATE SEQUENCE cliente_cod_cliente_seq_1;
+
+CREATE TABLE CLIENTE (
+                COD_CLIENTE BIGINT NOT NULL DEFAULT nextval('cliente_cod_cliente_seq_1'),
+                CPF VARCHAR NOT NULL,
+                ESTADO_CIVIL VARCHAR,
+                SEXO VARCHAR,
+                NOME VARCHAR(45) NOT NULL,
+                CNPJ VARCHAR,
+                DATA_NASC TIMESTAMP,
+                DATA_INCLUSAO TIMESTAMP NOT NULL,
+                NACIONALIDADE VARCHAR,
+                DEFICIENTE BOOLEAN,
+                RG VARCHAR,
+                DATA_ALTERACAO TIMESTAMP NOT NULL,
+                TITULAR BOOLEAN NOT NULL,
+                NATURALIDADE VARCHAR,
+                ESCOLARIDADE VARCHAR,
+                STATUS VARCHAR NOT NULL,
+                SITUACAO VARCHAR,
+                NUMERO_CARTEIRA VARCHAR,
+                SERIE VARCHAR,
+                VL_RENDA VARCHAR,
+                UF VARCHAR,
+                UNIDADE VARCHAR,
+                COD_CATEGORIA BIGINT,
+                CONSTRAINT cpf PRIMARY KEY (COD_CLIENTE)
+);
+
+
+ALTER SEQUENCE cliente_cod_cliente_seq_1 OWNED BY CLIENTE.COD_CLIENTE;
+
+CREATE SEQUENCE contato_codigo_contato_seq;
+
+CREATE TABLE CONTATO (
+                CODIGO_CONTATO BIGINT NOT NULL DEFAULT nextval('contato_codigo_contato_seq'),
+                CELULAR VARCHAR,
+                TELEFONE VARCHAR,
+                EMAIL VARCHAR,
+                COD_CLIENTE BIGINT NOT NULL,
+                CONSTRAINT codigo_contato PRIMARY KEY (CODIGO_CONTATO)
+);
+
+
+ALTER SEQUENCE contato_codigo_contato_seq OWNED BY CONTATO.CODIGO_CONTATO;
+
+CREATE SEQUENCE endereco_cod_endereco_cliente_seq;
+
+CREATE TABLE ENDERECO (
+                COD_ENDERECO_CLIENTE BIGINT NOT NULL DEFAULT nextval('endereco_cod_endereco_cliente_seq'),
+                CEP VARCHAR,
+                LOGRADOURO VARCHAR,
+                NUMERO VARCHAR,
+                COMPLEMENTO VARCHAR,
+                BAIRRO VARCHAR,
+                CIDADE VARCHAR,
+                UF VARCHAR,
+                COD_CLIENTE BIGINT NOT NULL,
+                CONSTRAINT cod_endereco_cliente PRIMARY KEY (COD_ENDERECO_CLIENTE)
+);
+
+
+ALTER SEQUENCE endereco_cod_endereco_cliente_seq OWNED BY ENDERECO.COD_ENDERECO_CLIENTE;
+
+
+
+ALTER TABLE CLIENTE ADD CONSTRAINT categoria_cliente_fk
+FOREIGN KEY (COD_CATEGORIA)
+REFERENCES CATEGORIA (COD_CATEGORIA)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE CONTATO ADD CONSTRAINT cliente_contato_cliente_fk
+FOREIGN KEY (COD_CLIENTE)
+REFERENCES CLIENTE (COD_CLIENTE)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE ENDERECO ADD CONSTRAINT cliente_endereco_cliente_fk
+FOREIGN KEY (COD_CLIENTE)
+REFERENCES CLIENTE (COD_CLIENTE)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
